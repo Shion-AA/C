@@ -7,6 +7,10 @@ typedef struct node{
     struct node * RC;
 }*NodePtr, Node;
 
+int deleteMin(NodePtr*);
+int deleteMax(NodePtr*);
+void delete(NodePtr*, int);
+NodePtr* find(NodePtr*, int);        //optional function - returns the address of the node if such exists. otherwise returns address of suggested location.
 void insert(NodePtr*, int);
 void print(NodePtr);
 
@@ -21,6 +25,17 @@ int main(){
     insert(&root, 7);
     insert(&root, 1);
     print(root);
+    printf("\n");
+    delete(&root, 1);
+    print(root);
+    printf("\n");
+    delete(&root, 1);
+    delete(&root, 5);
+    delete(&root, 3);
+    delete(&root, 4);
+    delete(&root, 10);
+    print(root);
+    printf("\n");
 }
 
 void insert(NodePtr* root, int x){
@@ -38,6 +53,40 @@ void insert(NodePtr* root, int x){
     }
 }
 
+void delete(NodePtr *root, int x){
+    NodePtr* location = find(root, x);
+    if(*location != NULL){
+        if((*location)->LC != NULL){
+            (*location)->val = deleteMax(&(*location)->LC);
+        } else if((*location)->RC != NULL){
+            (*location)->val = deleteMin(&(*location)->RC);
+        } else {
+            *location = NULL;
+            free(*location);
+        }
+    } else {
+        printf("[%d] such node not found.\n", x);
+    }
+}
+
+int deleteMin(NodePtr *RC){
+    for(;(*RC)->LC != NULL; RC = &(*RC)->LC){}
+    int ret = (*RC)->val;
+    NodePtr temp = *RC;
+    *RC = (*RC)->RC;
+    free(temp);
+    return ret;
+}
+
+int deleteMax(NodePtr *LC){
+    for(;(*LC)->RC != NULL; LC = &(*LC)->RC){}
+    int ret = (*LC)->val;
+    NodePtr temp = *LC;
+    *LC = (*LC)->LC;
+    free(temp);
+    return ret;
+}
+
 void print(NodePtr root){
     if(root->LC != NULL){
         print(root->LC);
@@ -46,4 +95,10 @@ void print(NodePtr root){
     if(root->RC != NULL){
         print(root->RC);
     }
+}
+
+NodePtr* find(NodePtr* root, int x){
+    NodePtr* trav = root;
+    for(;*trav != NULL && (*trav)->val != x; trav = (x < (*trav)->val) ? &(*trav)->LC : &(*trav)->RC){}
+    return trav;
 }
