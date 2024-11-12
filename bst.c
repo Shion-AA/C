@@ -26,14 +26,23 @@ int main(){
     insert(&root, 1);
     print(root);
     printf("\n");
-    delete(&root, 1);
-    print(root);
-    printf("\n");
+
     delete(&root, 1);
     delete(&root, 5);
     delete(&root, 3);
     delete(&root, 4);
     delete(&root, 10);
+    print(root);
+    printf("\n");
+
+    insert(&root, 12);
+    insert(&root, 410);
+    insert(&root, 50);
+    insert(&root, 5);
+    insert(&root, 100);
+    insert(&root, 22);
+    insert(&root, 1);
+    insert(&root, 33);
     print(root);
     printf("\n");
 }
