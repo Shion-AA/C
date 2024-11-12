@@ -1,38 +1,76 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define SIZE 9
+#define SIZE 12
 
 typedef struct {
     int list[SIZE];
     int lastNdx;
-} Heap;
+} Heap, *HeapPtr;
 
 void print(Heap);
 void heapifySubtree(Heap*, int);
 void heapifyAll(Heap *H);
+int getMinChild(HeapPtr, int);
 
-int dequeue(int list[]){
-   
+int dequeue(HeapPtr H){
+    int ret = -1;
+    if(H->lastNdx != -1){
+        ret = H->list[0];
+        H->list[0] = H->list[H->lastNdx--];
+        heapifySubtree(H, 0);
+    }
+    return ret;
 }
 
-void heapifyAll(Heap *H){
+void heapifyAll(HeapPtr H){
     int LLP = (H->lastNdx - 1) / 2;
     while(LLP != -1){
         heapifySubtree(H, LLP--);
     }
 }
 
-void heapifySubtree(Heap *H, int index){
+int getMinChild(HeapPtr H, int index) {
+    int LC = index * 2 + 1;
+    int RC = LC + 1;
+    if(LC > H->lastNdx || LC < 0){LC = -1;};
+    if(RC > H->lastNdx || RC < 0){RC = -1;};
+
+    int retIndex = -1;
+
+    if(LC != -1){
+        if(RC != -1 && H->list[RC] < H->list[LC]){
+            retIndex = RC;
+        } else {
+            retIndex = LC;
+        }
+    }
+    return retIndex;
+}
+
+void heapifySubtree(HeapPtr H, int index){
+    if(index != -1){
+        int child = getMinChild(H, index);
+
+        if (child != -1 && child <= H->lastNdx && H->list[child] < H->list[index]) {
+            int temp = H->list[child];
+            H->list[child] = H->list[index];
+            H->list[index] = temp;
+            heapifySubtree(H, child);
+        }
+    }
+}
+
+void oldheapifySubtree(HeapPtr H, int index){
     if(index != -1){
         int swap = -1;
         int LC = (index * 2) + 1;
         int RC = (index + 1) * 2;
 
-        if(LC >= SIZE){       //LC doesnt exists
+        if(LC > H->lastNdx){       //LC doesnt exists
             LC = -1;
         }
-        if(RC >= SIZE){       //RC doesnt exists
+        if(RC > H->lastNdx){       //RC doesnt exists
             RC = -1;
         }
 
@@ -59,13 +97,41 @@ void print(Heap H){
     printf("\n");
 }
 
-void main(){
+int main(){
     Heap L;
-    int a[] =  {2,3,4,5,6,7,8,9,1};     //binary balanced tree
+    int a[] =  {5,2,6,1,4,8,2,3,7};     //binary balanced tree
     memcpy(L.list, a, sizeof(a));
     L.lastNdx = 8;
 
     heapifyAll(&L);
 
     print(L);
+
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+    printf("dequeued: %d\n", dequeue(&L));
+    print(L);
+
 }
