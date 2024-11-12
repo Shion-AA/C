@@ -70,8 +70,9 @@ void delete(NodePtr *root, int x){
         } else if((*location)->RC != NULL){
             (*location)->val = deleteMin(&(*location)->RC);
         } else {
+            NodePtr temp = *location;
             *location = NULL;
-            free(*location);
+            free(temp);
         }
     } else {
         printf("[%d] such node not found.\n", x);
