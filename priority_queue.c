@@ -12,6 +12,8 @@ void print(Heap);
 void heapifySubtree(Heap*, int);
 void heapifyAll(Heap *H);
 int getMinChild(HeapPtr, int);
+int dequeue(HeapPtr);
+void enqueue(HeapPtr, int);
 
 int dequeue(HeapPtr H){
     int ret = -1;
@@ -23,6 +25,13 @@ int dequeue(HeapPtr H){
     return ret;
 }
 
+void enqueue(HeapPtr H, int x){
+    if(H->lastNdx < SIZE - 1){
+        //insert at last, and then run heapify all. but I still think there might be a better way somehow...
+        H->list[++H->lastNdx] = x;
+        heapifyAll(H);
+    }
+}
 void heapifyAll(HeapPtr H){
     int LLP = (H->lastNdx - 1) / 2;
     while(LLP != -1){
@@ -61,33 +70,31 @@ void heapifySubtree(HeapPtr H, int index){
     }
 }
 
-void oldheapifySubtree(HeapPtr H, int index){
-    if(index != -1){
-        int swap = -1;
-        int LC = (index * 2) + 1;
-        int RC = (index + 1) * 2;
-
-        if(LC > H->lastNdx){       //LC doesnt exists
-            LC = -1;
-        }
-        if(RC > H->lastNdx){       //RC doesnt exists
-            RC = -1;
-        }
-
-        if(LC != -1){
-            swap = LC;
-        if(RC != -1 && H->list[LC] > H->list[RC]){
-            swap = RC;
-        }
-        }
-        if(swap != -1 && H->list[swap] < H->list[index]){
-            int temp = H->list[swap];
-            H->list[swap] = H->list[index];
-            H->list[index] = temp;
-            heapifySubtree(H, swap);
-        }
-    }
-}
+// void oldheapifySubtree(HeapPtr H, int index){
+//     if(index != -1){
+//         int swap = -1;
+//         int LC = (index * 2) + 1;
+//         int RC = (index + 1) * 2;
+//         if(LC > H->lastNdx){       //LC doesnt exists
+//             LC = -1;
+//         }
+//         if(RC > H->lastNdx){       //RC doesnt exists
+//             RC = -1;
+//         }
+//         if(LC != -1){
+//             swap = LC;
+//         if(RC != -1 && H->list[LC] > H->list[RC]){
+//             swap = RC;
+//         }
+//         }
+//         if(swap != -1 && H->list[swap] < H->list[index]){
+//             int temp = H->list[swap];
+//             H->list[swap] = H->list[index];
+//             H->list[index] = temp;
+//             heapifySubtree(H, swap);
+//         }
+//     }
+// }
 
 void print(Heap H){
     int i;
@@ -99,12 +106,21 @@ void print(Heap H){
 
 int main(){
     Heap L;
-    int a[] =  {5,2,6,1,4,8,2,3,7};     //binary balanced tree
-    memcpy(L.list, a, sizeof(a));
-    L.lastNdx = 8;
+    L.lastNdx = -1;
+    int a[] =  {5,2,6,1,4,
+                8,2,3,7,1,
+                2,200,300,2,100};
+    // memcpy(L.list, a, sizeof(a));
+    // L.lastNdx = 8;
 
-    heapifyAll(&L);
+    // heapifyAll(&L);
 
+    // print(L);
+
+    int i;
+    for(i = 0; i < sizeof(a) / sizeof(int); i++){
+        enqueue(&L, a[i]);
+    }
     print(L);
 
     printf("dequeued: %d\n", dequeue(&L));
