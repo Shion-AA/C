@@ -121,10 +121,10 @@ int main() {
     heapifyAll(&emptyHeap);
     print(emptyHeap);
 
-    Prim prim;
-    prim = matToPrim(mat);
+    Kruskal kruskal;
+    kruskal = matToKruskal(mat);
     // printf("debug");
-    print(prim.eList);
+    print(kruskal.eList);
 }
 
 // Prim matToPrim(LabelAdjMat mat){    //v1: create min-heap before finding MST
@@ -156,14 +156,28 @@ int main() {
 // }   //nvm I cant. move on to v2
 
 Kruskal matToKruskal(LabelAdjMat mat){
-    int x, y;
-    char union[MAX] = "ABCDE";
+    char unions[] = "ABCDE";
 
     minHeapOrList heap;
     createMinHeap(&heap, mat);
-    edgeType min;
-    min.weight= INF;
-    while(heap->lastNdx != -1){
-        
+    edgeType edge;
+    Kruskal MST;
+    MST.cost=0;
+    MST.eList.lastNdx = -1;
+    int temp, x;
+    while(MST.eList.lastNdx != MAX-1){
+        edge = deleteMinHeap(&heap);
+        if(unions[edge.u] != unions[edge.v]){
+            //doenst create loop
+            MST.cost += edge.weight;
+            MST.eList.edges[++MST.eList.lastNdx] = edge;
+            temp = unions[edge.u];
+            for(x = 0; x < MAX; x++){
+                if(temp == x){
+                    unions[x] = temp;
+                }
+            }
+        }
     }
+    return MST;
 }
