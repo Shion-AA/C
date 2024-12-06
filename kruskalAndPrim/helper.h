@@ -25,8 +25,8 @@ void initMinHeap(minHeapOrList*);   //helper
 void createMinHeap(minHeapOrList*, LabelAdjMat);    //preliminary
 void insertMinHeap(int weight, int u, int v, minHeapOrList *);  //helper: inserts element in LabelAdjMat as newly created edgeType and heapify.
 edgeType deleteMinHeap(minHeapOrList *);    //preliminary
-void heapifySubtree(int index, minHeapOrList *);    //helper: given the index, heapifies its subtrees.
-
+void heapifySubtree(minHeapOrList *, int index);    //helper: given the index, heapifies its subtrees.
+void heapifyAll(minHeapOrList *);
 // void heapifySubtree(int index, minHeapOrList * heap){
 //     int LC = index * 2 + 1;
 //     int RC = LC + 1;

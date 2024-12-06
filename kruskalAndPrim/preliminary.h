@@ -1,4 +1,4 @@
-#include "helper.h";
+#include "helper.h"
 
 void createMinHeap(minHeapOrList *heap, LabelAdjMat mat){
     initMinHeap(heap);
@@ -8,9 +8,9 @@ void createMinHeap(minHeapOrList *heap, LabelAdjMat mat){
             if(mat[x][y] != INF){
                 // insertMinHeap(mat[x][y], x, y, heap);       //insertMinHeap(int weight, int u, int v, minHeapOrList *heap);
                 //or...
-                heap->edges[lastNdx].u = x;
-                heap->edges[lastNdx].v = y;
-                heap->edges[lastNdx++].weight = mat[x][y];
+                heap->edges[heap->lastNdx].u = x;
+                heap->edges[heap->lastNdx].v = y;
+                heap->edges[heap->lastNdx++].weight = mat[x][y];
                 //insert each, and then later heapifyAll
             }
         }
@@ -19,12 +19,16 @@ void createMinHeap(minHeapOrList *heap, LabelAdjMat mat){
 }
 
 edgeType deleteMinHeap(minHeapOrList *heap){
+    edgeType min;
+    min.weight = INF;
+    min.u = -1;
+    min.v = -1;
     if(heap->lastNdx > -1){
-        edgeType min = heap->edges[0];
-        edgeType * temp = heap->edges[heap->lastNdx--];
+        min = heap->edges[0];
+        edgeType * temp = &(heap->edges[heap->lastNdx--]);
         heap->edges[0] = *temp;
         free(temp);
-        heapifySubTree(0, heap);    //heapifySubtree(int index, minHeapOrList *heap)
+        heapifySubtree(0, heap);    //heapifySubtree(int index, minHeapOrList *heap)
     }
     return min;
 }
