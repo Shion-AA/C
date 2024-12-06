@@ -53,10 +53,11 @@ void insert(NodePtr* root, int x){
     temp->val = x;
     temp->LC = NULL;
     temp->RC = NULL;
-    NodePtr * trav = root;
-    for(;(*trav) != NULL && (*trav)->val != x;trav = (x < (*trav)->val) ? &(*trav)->LC : &(*trav)->RC){}
-    if(*trav == NULL){
-        *trav = temp;
+    // NodePtr * trav = root;
+    // for(;(*trav) != NULL && (*trav)->val != x;trav = (x < (*trav)->val) ? &(*trav)->LC : &(*trav)->RC){}
+    NodePtr* location = find(root, x);
+    if(*location == NULL){
+        *location = temp;
     } else {
         printf("Duplicate entry found, exiting without inserting.[%d]\n", x);
     }
