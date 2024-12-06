@@ -155,15 +155,35 @@ int main() {
 //     return MSP;
 // }   //nvm I cant. move on to v2
 
-Kruskal matToKruskal(LabelAdjMat mat){
+Prim matToPrim(LabelAdjMat mat){
     int x, y;
-    char union[MAX] = "ABCDE";
+    int visited[MAX] = {0,0,0,0,0};
+    visited[0] = 1;     //random first node;
+    Prim MST;
+    MST.eList.lastNdx = -1;
+    MST.cost = 0;
+    edgeType minEdge;
+    while(MST.eList.lastNdx < MAX - 2){
+        minEdge.weight = INF;
 
-    minHeapOrList heap;
-    createMinHeap(&heap, mat);
-    edgeType min;
-    min.weight= INF;
-    while(heap->lastNdx != -1){
-        
+        for(x = 0; x < MAX; x++){
+            if(visited[x] == 1){
+                for(y = 0; y < MAX; y++){
+                    if(visited[y] == 0 && mat[x][y] < minEdge.weight){
+                        minEdge.u = x;
+                        minEdge.v = y;
+                        minEdge.weight = mat[x][y];
+                    }
+                }
+            }
+        }
+        if(minEdge.weight != INF){
+            MST.cost += minEdge.weight;
+            MST.eList.edges[++MST.eList.lastNdx] = minEdge;
+            visited[minEdge.v] = 1;
+        } else {
+            printf("Error");
+        }
     }
+    return MST;
 }

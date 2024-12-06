@@ -1,3 +1,4 @@
+
 #include "helper.h"
 
 void createMinHeap(minHeapOrList *heap, LabelAdjMat mat){
